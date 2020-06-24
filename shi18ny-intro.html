@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introduction to Shi18ny</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Juan Pablo Marín Díaz" />
+    <meta name="date" content="2020-06-24" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/chocolate.css" rel="stylesheet" />
+    <link rel="stylesheet" href="custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+class: title-slide
+
+.bg-text[
+# {shi18ny}
+
+### Internationalization for Shiny Apps
+
+Juan Pablo Marín Díaz   | @jpmarindiaz
+June 24, 2020  
+]
+
+---
+
+background-size: contain, 50% 50%, cover
+background-image: url(img/karl.jpg)
+class: top, right, inverse
+
+---
+
+# Internationalization
+
+.pull-left[
+# Peter, you can't speak italian just because you have a mustache
+]
+.pull-right[
+![:class shadow](img/peter.gif)
+]
+
+---
+
+# Hello internationalization
+
+.pull-left[
+![:class shadow](img/sofia-hola-griffin.gif)
+]
+.pull-right[
+![:class shadow](img/peter.gif)
+]
+
+---
+
+# Hello internationalization
+
+.pull-left[
+![:class shadow](img/sofia-hola-griffin.gif)
+]
+
+--
+
+.pull-right[
+ 
+
+```r
+library(shi18ny)
+
+lapply(c("ru", "es", "de", "pt"), function(x) {
+  i_("hello", x)
+})
+```
+
+```
+## [[1]]
+## [1] "Привет"
+## 
+## [[2]]
+## [1] "hola"
+## 
+## [[3]]
+## [1] "Hallo"
+## 
+## [[4]]
+## [1] "olá"
+```
+]
+
+---
+
+# Why do I care about internationalization?
+
+.pull-left[
+
+### I wanted to make an interactive map of the world, but databases were mostly in english
+
+&gt; It took longer than expected
+]
+
+.pull-right[
+
+![:class shadow](img/sofia-latin.gif)
+
+]
+
+---
+
+# Why do I care about internationalization?
+
+- Inclusive design
+- Most of us don't speak english as a first language
+- Global issues, global audience
+- Reach international audiences with less effort
+- Why coding two apps when you can make only one
+
+---
+
+
+# Why do I care about internationalization?
+
+
+## [If we are going to make data science available and accessible to a broader audience we need to build easy to use tools, better if they are tailored to non-coders]()
+
+---
+
+# How to build internationalization?
+
+- First step: See how it works in other languages
+
+--
+
+I got inspiration from `NodeJS i18n`
+
+--
+
+- Second step: How to build it for R?
+
+--
+
+One initial idea was to make it work with custom translation files in `yaml`
+
+
+
+
+
+---
+
+background-size: contain, 50% 50%, cover
+background-image: url(img/background-viz.jpg)
+class: title-slide, inverse
+
+--
+
+&gt; The word **internationalization** has **18** characters between the first **i** and the last **n**
+
+--
+
+## Can we squeeze i18n into shiny?
+
+--
+
+Spoiler alert
+
+--
+
+# Yes!
+
+## {shi18ny}
+
+---
+
+# {sh**i18**ny} Getting Started
+
+## Installation:
+
+```r
+devtools::install("datasketch/shi18ny")
+```
+
+
+## More Information:
+
+Docs: https://shi18ny.datasketch.dev/
+
+Github: https://github.com/datasketch/shi18ny
+
+
+---
+
+# Does it really have 18 characters between the **i** and the **n**?
+
+Let's find out
+
+--
+
+
+```r
+nchar("nternationalizatio")
+```
+
+```
+## [1] 18
+```
+
+```r
+paste0("i", nchar("nternationalizatio"),"n")
+```
+
+```
+## [1] "i18n"
+```
+
+
+---
+
+background-size: contain, 50% 50%, cover
+background-image: url(img/background-viz.jpg)
+class: inverse, center, middle, title-slide
+
+# Our first shiny app with internationalization
+
+## Vamos lá
+## Let's start
+## Comencemos
+
+
+---
+
+# First App with Internationalization
+
+.pull-left[
+
+```r
+library(shiny)
+library(shi18ny)
+
+ui &lt;- fluidPage(
+
+  # Use shi18ny
+  # Language selector input
+
+)
+
+server &lt;- function(input, output, session) {
+  
+  # Configure shi18ny
+  # Call language module
+  # Render translations
+
+}
+
+shinyApp(ui, server)
+
+```
+
+]
+
+.pull-right[
+  App structure to include internationalization
+  
+  ![:class shadow](img/demo-1-shi18ny.gif)
+]
+
+---
+
+# First App with Internationalization
+
+
+.pull-left[
+
+```r
+ui &lt;- fluidPage(
+* useShi18ny(), # Use shi18ny
+  langSelectorInput("lang", position = "fixed"), # Language selector input 
+  h1(ui_("hello")), 
+  uiOutput("results")
+)
+
+server &lt;- function(input, output, session) {
+  # Configure shi18ny
+  # Call language module
+  # Render translations
+}
+
+```
+
+]
+
+.pull-right[
+  
+# UI
+
+Run some client side javascript to update strings when active language changes
+
+]
+
+---
+
+# First App with Internationalization
+
+
+.pull-left[
+
+```r
+ui &lt;- fluidPage(
+  useShi18ny(), # Use shi18ny
+* langSelectorInput("lang", position = "fixed"), # Language selector input 
+  h1(ui_("hello")), 
+  uiOutput("results")
+)
+
+server &lt;- function(input, output, session) {
+  # Configure shi18ny
+  # Call language module
+  # Render translations
+}
+
+```
+
+]
+
+.pull-right[
+
+# UI
+
+Call the language switcher input
+
+]
+
+
+---
+background-image: url(../img/emo/boredom-small.png)
+---
+
+# First App with Internationalization
+
+
+.pull-left[
+
+```r
+ui &lt;- fluidPage(
+  useShi18ny(), # Use shi18ny
+  langSelectorInput("lang", position = "fixed"), # Language selector input 
+* h1(ui_("hello")), 
+* uiOutput("results")
+)
+
+server &lt;- function(input, output, session) {
+  # Configure shi18ny
+  # Call language module
+  # Render translations
+}
+
+```
+
+]
+
+.pull-right[
+
+# UI
+
+Define some strings in the UI and some output from the server to translate
+
+]
+
+
+---
+
+# First App with Internationalization
+
+
+.pull-left[
+
+```r
+ui &lt;- fluidPage(...)
+
+server &lt;- function(input, output, session) {
+  # Configure shi18ny
+* i18n &lt;- list(
+*   defaultLang = "en",
+*   availableLangs = c("es","en")
+* )
+  # Call language module
+  lang &lt;- callModule(langSelector,"lang", i18n = i18n, 
+                     showSelector = TRUE)
+  # Render translations
+  output$results &lt;- renderUI({
+    list(
+      h1(i_("world",lang())), br(),
+      h4(i_("language",lang()), lang())
+    )
+  })
+}
+
+```
+
+]
+
+.pull-right[
+
+# Server
+
+Configure shi18ny options
+
+]
+
+
+---
+
+# First App with Internationalization
+
+
+.pull-left[
+
+```r
+ui &lt;- fluidPage(...)
+
+server &lt;- function(input, output, session) {
+  # Configure shi18ny
+  i18n &lt;- list(
+    defaultLang = "en",
+    availableLangs = c("es","en")
+  )
+  # Call language module
+* lang &lt;- callModule(langSelector,"lang", i18n = i18n, 
+*                    showSelector = TRUE)
+  # Render translations
+  output$results &lt;- renderUI({
+    list(
+      h1(i_("world",lang())), br(),
+      h4(i_("language",lang()), lang())
+    )
+  })
+}
+
+```
+
+]
+
+.pull-right[
+
+# Server
+
+Call the module to get the active language in a reactive `lang()`
+
+]
+
+
+---
+
+# First App with Internationalization
+
+
+.pull-left[
+
+```r
+ui &lt;- fluidPage(...)
+
+server &lt;- function(input, output, session) {
+  # Configure shi18ny
+  i18n &lt;- list(
+    defaultLang = "en",
+    availableLangs = c("es","en")
+  )
+  # Call language module
+  lang &lt;- callModule(langSelector,"lang", i18n = i18n, 
+                     showSelector = TRUE)
+  # Render translations
+  output$results &lt;- renderUI({
+    list(
+*     h1(i_("world",lang())), br(),
+*     h4(i_("language",lang()), lang())
+    )
+  })
+}
+
+```
+
+]
+
+.pull-right[
+
+# Server
+
+Use the active selected language in `lang()` to translate strings with the `i_` function.
+
+]
+
+
+---
+
+## How it works
+
+--
+
+.left-column[
+### The `i_` function
+]
+
+.right-column[
+
+- Pass a string and the language to translate it to
+- The string gets looked up in a dictionary and translated
+- Use `ui_` in the UI and `i_` in the Server.
+- Works with vectors and lists
+- Works with reactives and modules
+
+]
+
+---
+
+## How it works
+
+.left-column[
+### The `i_` function
+### Config
+]
+
+.right-column[
+
+- Set default language when none provided
+- Define available languages for users
+- Fallback languages
+
+]
+
+---
+
+## How it works
+
+.left-column[
+### The `i_` function
+### Config
+### Custom Translations
+]
+
+.right-column[
+
+- Locale dir
+- Navigate locale `yaml` keywords
+
+]
+
+---
+
+
+## How it works
+
+.left-column[
+### The `i_` function
+### Config
+### Custom Translations
+### Language Switcher
+
+]
+
+.right-column[
+
+- Custom shiny input
+  - Include flags or not, customize language text.
+- Set language by url parameter
+  - Use `?lang=es` or supported code languages to set language on app load.
+
+]
+
+---
+
+# See it in action
+
+
+---
+
+# What comes next
+
+.pull-left[
+
+- "Invent" your own language
+- Will {shi18ny} make to CRAN?
+- How about internationalizing other things? visualizations, rmarkdown reports, slides?
+- How to change locale for dates?
+
+
+]
+
+.pull-right[
+
+![:class shadow](img/sofia-tell-me.gif)
+
+]
+
+
+
+---
+
+
+
+
+
+
+
+
+
+
+---
+
+# Macros (yaml)
+
+- remark.js [allows users to define custom macros](https://github.com/yihui/xaringan/issues/80) (JS functions) that can be applied to Markdown text using the syntax
+    - `![:macroName arg1, arg2, ...]`, or 
+    
+    - `![:macroName arg1, arg2, ...](this)`
+
+- Define macros in `macros.js` and include it in yaml with `beforeInit` under the option `nature`:
+
+    ```yaml
+    output:
+      xaringan::moon_reader:
+        nature:
+          beforeInit: "macros.js"
+    ```
+
+---
+
+# Macros (create)
+
+You can define a macro named `scale` in `macros.js`: 
+
+```js
+remark.macros.scale = function (val) {
+  var url = this;
+  return '&lt;img src="' + url + '" style="width: ' + val + '" /&gt;';
+};
+```
+
+--
+
+Then the Markdown text
+
+```markdown
+![:scale 50%](image.jpg)
+```
+
+--
+
+will be translated to
+
+```html
+&lt;img src="image.jpg" style="width: 50%" /&gt;
+```
+    
+---
+
+
+```markdown
+Some text ![:scale 70px](../img/emo/bye.png)
+```
+
+Some text ![:scale 70px](../img/emo/bye.png)
+
+--
+
+```markdown
+.center[
+![:scale 150px](../img/emo/bye.png)
+]
+```
+
+.center[![:scale 150px](../img/emo/indian.png)]
+
+---
+
+# Macros (usage)
+
+```markdown
+![:gen 90%, shadow](../img/pictures/road-red.jpg)
+```
+
+![:gen 90%, shadow](../img/pictures/road-red.jpg)
+---
+
+.pull-left[
+![:gen 150px, shadow](https://media.giphy.com/media/26Do6la9cIiHvIwMM/giphy.gif)
+
+![:gen 150px, shadow](https://media.giphy.com/media/84g6u2O3epwKA/giphy.gif)
+
+![:gen 150px, shadow](https://media.giphy.com/media/rSZdnoUEEkROM/giphy.gif)
+
+![:gen 150px, shadow](https://media.giphy.com/media/K6sJ65pUgAn8k/giphy.gif)
+
+![:gen 150px, shadow](https://media.giphy.com/media/lAR4Dpck3ntS0/giphy.gif)
+]
+
+.pull-right[
+![:gen 150px, shadow](https://media.giphy.com/media/qSNtgm0PgG6vm/giphy.gif)
+
+![:gen 150px, shadow](https://media.giphy.com/media/eAjhx94F7290s/giphy.gif)
+
+![:gen 150px, shadow](https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif)
+
+![:gen 150px, shadow](https://media.giphy.com/media/Jk4ZT6R0OEUoM/giphy.gif)
+]
+
+---
+
+## MathJax
+
+```latex
+\color{blue}{ \frac{a}{\color{red} b} \sqrt{\color{black} x} }
+```
+
+`\(\color{blue} {\frac{a}{\color{red} b} \sqrt{\color{black} x}}\)`
+
+---
+
+## Thanks For Reading
+
+[GitHub Source](https://github.com/liao961120/slides/tree/master/xaringan)
+
+--
+
+.middle[.center[![:scale 400px](../img/emo/bye.png)]]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="assets/macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+<style>
+.logo {
+  background-image: url(logo-datasketch.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  bottom: 0.5em;
+  left: 1em;
+  width: 120px;
+  height: 60px;
+  z-index: 0;
+}
+</style>
+
+<script>
+document
+  .querySelectorAll(
+    '.remark-slide-content' +
+    ':not(.title-slide)' +
+    // add additional classes to exclude here, e.g.
+    // ':not(.inverse)' +
+    ':not(.hide-logo)'
+  )
+  .forEach(el => {
+    el.innerHTML += '<div class="logo"></div>';
+  });
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
